@@ -1,22 +1,22 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, BrowserWindow } = require("electron");
+const path = require("path");
 
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, "preload.js"),
             nodeIntegration: false,
             contextIsolation: true
         }
     });
 
-    win.loadFile('src/index.html');
+    win.loadFile("src/index.html");
 }
 
 app.whenReady().then(createWindow);
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") app.quit();
 });
