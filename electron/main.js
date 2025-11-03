@@ -12,7 +12,17 @@ function createWindow() {
         }
     });
 
-    win.loadFile("src/index.html");
+    const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+
+    console.log(isDev);
+
+    if (isDev) {
+        console.log("Running in development mode");
+        win.loadURL("http://localhost:5173/src/index.html");
+    } else {
+        console.log("Running in production mode");
+        win.loadFile("src/index.html");
+    }
 }
 
 app.whenReady().then(createWindow);

@@ -4,6 +4,7 @@
     "description": "A minimal Electron app with Monaco Editor",
     "main": "electron/main.js",
     "scripts": {
+        "dev": "vite",
         "build": "vite build",
         "start": "electron ."
     },
