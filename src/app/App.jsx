@@ -1,5 +1,9 @@
 export function App() {
     return (
-        <div>Kuark Studio</div>
+        <div layout="fullscreen">Kuark Studio</div>
     );
 }
+
+window.kuark.getFiles('./').then(files => {
+    console.log('Files:', files);
+});
