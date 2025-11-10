@@ -80,6 +80,45 @@ function patch(file, type) {
     return content;
 }
 
+function adapt(resource, device, type = "layout") {
+    const breakpoints = {
+        mobile: "(max-width: 600px)",
+        tablet: "(min-width: 600px) and (max-width: 900px)",
+        laptop: "(min-width: 900px) and (max-width: 1200px)",
+        desktop: "(min-width: 1200px) and (max-width: 1600px)",
+        tv: "(min-width: 1600px)",
+    };
+
+    let group = "layouts";
+
+    switch (type) {
+        case "aesthetic":
+            group = "aesthetics";
+            break;
+        case "skin":
+            group = "skins";
+            break;
+        case "motion":
+            group = "motions";
+            break;
+    }
+
+    const rootDir = path.resolve(path.join(process.cwd(), config.env.VITE_APP_BASE));
+    const file = path.join(rootDir, `${group}/${device}/${resource}.css`);
+
+    if (fs.existsSync(file)) {
+        const content = patch(file, type);
+
+        return `
+            @container ${breakpoints[device]} {
+                ${content}
+            }
+        `;
+    }
+
+    return "";
+}
+
 function patchAesthetics() {
     const rootDir = path.resolve(path.join(process.cwd(), config.env.VITE_APP_BASE));
 
@@ -93,6 +132,12 @@ function patchAesthetics() {
 
             source += content + '\n';
         }
+
+        source += adapt(aesthetic, "mobile", "aesthetic");
+        source += adapt(aesthetic, "tablet", "aesthetic");
+        source += adapt(aesthetic, "laptop", "aesthetic");
+        source += adapt(aesthetic, "desktop", "aesthetic");
+        source += adapt(aesthetic, "tv", "aesthetic");
     }
 
     for (let skin of skins) {
@@ -103,6 +148,12 @@ function patchAesthetics() {
 
             source += content + '\n';
         }
+
+        source += adapt(skin, "mobile", "skin");
+        source += adapt(skin, "tablet", "skin");
+        source += adapt(skin, "laptop", "skin");
+        source += adapt(skin, "desktop", "skin");
+        source += adapt(skin, "tv", "skin");
     }
 
     for (let motion of motions) {
@@ -113,6 +164,12 @@ function patchAesthetics() {
 
             source += content + '\n';
         }
+
+        source += adapt(motion, "mobile", "motion");
+        source += adapt(motion, "tablet", "motion");
+        source += adapt(motion, "laptop", "motion");
+        source += adapt(motion, "desktop", "motion");
+        source += adapt(motion, "tv", "motion");
     }
 
     return source;
@@ -124,13 +181,19 @@ function patchLayouts() {
     let source = "";
 
     for (let layout of layouts) {
-        const file = path.join(rootDir, `layouts/${layout}.css`);
+        let file = path.join(rootDir, `layouts/${layout}.css`);
 
         if (fs.existsSync(file)) {
             const content = patch(file, "layout");
 
             source += content + '\n';
         }
+
+        source += adapt(layout, "mobile", "layout");
+        source += adapt(layout, "tablet", "layout");
+        source += adapt(layout, "laptop", "layout");
+        source += adapt(layout, "desktop", "layout");
+        source += adapt(layout, "tv", "layout");
     }
 
     return source;

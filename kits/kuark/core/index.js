@@ -17,7 +17,11 @@ class Curator {
         this.worker = new Worker(name, { type: "module" });
 
         this.worker.onmessage = (ev) => {
-            e.render(ev);
+            if (ev.data.action === "repaint") {
+                e.paint(ev.data.glyph, "repaint");
+            } else {
+                e.render(ev);
+            }
         }
 
         if (autoPaint) {
@@ -28,17 +32,27 @@ class Curator {
     render(ev) {
         const el = document.getElementById(ev.data.target);
 
-        render(ev.data.glyph, el);
+        if (ev.data.mode) {
+            console.log(ev.data.mode);
+            render(ev.data.glyph, el, ev.data.mode);
+        } else {
+            render(ev.data.glyph, el);
+        }
     }
 
-    paint(glyph) {
+    paint(glyph, mode) {
         if (glyph) {
             this.worker.postMessage({
                 action: "paint",
+                mode,
                 glyph,
             });
         } else {
             this.worker.postMessage("paint");
         }
+    }
+
+    request(task) {
+        this.worker.postMessage(task);
     }
 }

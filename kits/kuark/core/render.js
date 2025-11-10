@@ -90,10 +90,35 @@ export function render(glyph, parent, option) {
                 }
             }
         }
+
+        if (glyph.props.onClick) {
+            console.log(glyph.props.onClick);
+            dom.onclick = () => {
+                console.log(glyph.props.onClick);
+                if (glyph.props.curate) {
+                    console.log(glyph.props.curate);
+                    for (let curator of curators) {
+                        if (curator.name === glyph.props.curate) {
+                            console.log("curate")
+                            curator.instance.request({
+                                action: "task",
+                                name: glyph.props.onClick,
+                            });
+
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     } else if (typeof glyph === "string") {
         dom = document.createTextNode(glyph);
     } else if (typeof glyph.type === "function") {
-        render(glyph.type(glyph.props), parent, option);
+        if (option == "repaint") {
+            //render(glyph.type(glyph.props), parent, "paint");
+        } else {
+            render(glyph.type(glyph.props), parent, option);
+        }
     }
 
     if (dom) {
@@ -106,13 +131,25 @@ export function render(glyph, parent, option) {
 
             if (Array.isArray(children)) {
                 for (let child of children) {
-                    render(child, dom, option);
+                    if (option == "repaint") {
+                        render(child, dom, "paint");
+                    } else {
+                        render(child, dom, option);
+                    }
 
-                    parent.appendChild(dom);
+                    if (option == "repaint") {
+                        parent.replaceChildren(dom);
+                    } else {
+                        parent.appendChild(dom);
+                    }
                 }
             }
         } else {
-            parent.appendChild(dom);
+            if (option == "repaint") {
+                parent.replaceChildren(dom);
+            } else {
+                parent.appendChild(dom);
+            }
         }
     }
 
@@ -127,14 +164,28 @@ export function render(glyph, parent, option) {
  */
 export function emit(glyphs) {
     return (ev) => {
+        console.log(ev);
+
         if (typeof ev.data === "object") {
             if (ev.data.action == "paint") {
                 for (let glyph of glyphs) {
                     if (glyph.name == ev.data.glyph) {
                         self.postMessage({
                             target: ev.data.glyph,
+                            mode: ev.data.mode,
                             glyph: resolve(glyph.component()),
                         });
+                        
+                        break;
+                    }
+                }
+            } else if (ev.data.action == "task") {
+                console.log(glyphs);
+                for (let glyph of glyphs) {
+                    console.log(ev.data);
+                    if (glyph.name == ev.data.name.toLowerCase()) {
+                        console.log("invoke");
+                        glyph.component();
                         
                         break;
                     }
@@ -208,7 +259,7 @@ export function resolve(glyph) {
         return resolve(glyph.type(glyph.props));
     }
 
-    if (typeof glyph === "object" && glyph.props.children) {
+    if (typeof glyph === "object" && glyph.class === "kuark.glyph" && glyph.props.children) {
         let children = glyph.props.children;
 
         if (!Array.isArray(children) && typeof children === "object") {
@@ -229,6 +280,11 @@ export function resolve(glyph) {
             }
             
             glyph.props.children = glyphs;
+        }
+    } else {
+        console.log(glyph);
+        if (glyph.class === "kuark.data") {
+            return glyph.toString();
         }
     }
 
