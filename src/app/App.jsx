@@ -4,6 +4,6 @@ export function App() {
     );
 }
 
-window.kuark.getFiles('./').then(files => {
+kuark.getFiles('./').then(files => {
     console.log('Files:', files);
 });
