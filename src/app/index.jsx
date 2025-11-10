@@ -9,7 +9,7 @@ import { App } from "./App";
 
 render(<App />, document.getElementById("app"), "prefetch-curators");
 
-self.MonacoEnvironment = {
+/*self.MonacoEnvironment = {
     getWorker(_, label) {
         switch (label) {
             case "json": return new JsonWorker();
@@ -22,9 +22,9 @@ self.MonacoEnvironment = {
     }
 };
 
-monaco.editor.create(document.getElementById("editor"), {
+/*monaco.editor.create(document.getElementById("editor"), {
     value: `function greet() {\n  console.log("Hello, Fritz!");\n}`,
     language: "javascript",
     theme: "vs-dark",
     automaticLayout: true
-});
+});*/
