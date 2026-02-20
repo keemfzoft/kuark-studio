@@ -17,7 +17,7 @@ function createWindow() {
 
     if (isDev) {
         console.log("Running in development mode");
-        win.loadURL("http://localhost:5174/src/index.html");
+        win.loadURL("http://localhost:5173/src/index.html");
     } else {
         console.log("Running in production mode");
         win.loadFile("src/index.html");

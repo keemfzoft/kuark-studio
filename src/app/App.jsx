@@ -1,9 +1,9 @@
 export function App() {
     return (
-        <div layout="fullscreen">
-            <span>Kuark Studio</span>
+        <div layout="fullscreen" aesthetic="workspace">
             <div aesthetic="avatar" motion="bounce">
                 <img source="/assets/images/robot-face.png" />
+                <div id="editor" layout="fullscreen"></div>
             </div>
         </div>
     );
