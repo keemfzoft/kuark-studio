@@ -11,14 +11,29 @@
             width: 100%;
         }
 
-        #app {
-            position: relative;
-            z-index: 100;
+        body {
+            overflow: hidden;
         }
 
+        #app {
+            position: absolute;
+            z-index: 100;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        #app > * {
+            pointer-events: auto; /* children regain clickability */
+        }
+
+
+        
         #editor {
             position: relative;
-            top: -100%;
+            /*top: -100%;*/
         }
         </style>
 

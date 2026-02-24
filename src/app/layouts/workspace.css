@@ -1,0 +1,26 @@
+.workspace {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none !important;
+
+    * {
+        pointer-events: auto;
+    }
+
+    #avatar {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        right: 0;
+        bottom: 0;
+        margin: 50px;
+    }
+
+    #shelf {
+        position: relative;
+        width: 200px;
+    }
+}

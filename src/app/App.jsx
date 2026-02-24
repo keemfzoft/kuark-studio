@@ -1,10 +1,7 @@
 export function App() {
     return (
-        <div layout="fullscreen" aesthetic="workspace">
-            <div aesthetic="avatar" motion="bounce">
-                <img source="/assets/images/robot-face.png" />
-                <div id="editor" layout="fullscreen"></div>
-            </div>
+        <div layout="workspace">
+            <div curator="poly" glyph="avatar"></div>
         </div>
     );
 }
